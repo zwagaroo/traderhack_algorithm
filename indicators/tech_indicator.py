@@ -6,14 +6,13 @@ from itertools import islice
 class TechIndicator(ABC):
 
     def __init__(self, tickers, length, data=None, **kwargs):
-
-        self.length = length
-        self.tickers = tickers
+        self.length = length #length of evaluation
+        self.tickers = tickers #tickers that the indicator includes
         # stores actual indicator values
         self.values = {ticker: list() for ticker in tickers}
         # stores buy/sell signals based on each indicator
         self.signals = {ticker: list() for ticker in tickers}
-
+        #if data isn't empty then we populate
         if data:
             self.populate(data, kwargs=kwargs)
 
@@ -58,7 +57,8 @@ class TechIndicator(ABC):
             start += len(self.values[ticker])
 
             # run evaluate() (which calls calculate) on first i times of data
-            for i in range(start, len(data[ticker])):
+            for i in range(start, len(data[ticker])): #each data[ticker] is a time series of that ticker
+                #data is dict pointing to timeseries based on ticker
                 data_for_first_i_times = {
                     ticker: data[ticker][:i+1] for ticker in self.tickers}
                 self.evaluate(data_for_first_i_times, kwargs=kwargs)
